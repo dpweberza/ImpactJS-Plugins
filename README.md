@@ -1,3 +1,5 @@
+<a href="http://www.pointofimpactjs.com/plugins/view/35/retro-high-score-name-field">Plugin Home</a>
+
 <p>This plugin allows you to add a retro style high score name text field to your game. The player uses his / her keyboard to switch each character to the desired letter of the alphabet to make up his / her name.</p>
 
 <p><strong>Usage is really simple:</strong></p>
@@ -19,4 +21,6 @@
 
 <p>To get the name after saying the Enter key was pressed simply call getName()</p>
 
-<pre><code>this.retroNameField.getName()</code></pre>
+<pre>
+	<code>this.retroNameField.getName()</code>
+</pre>
