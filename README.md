@@ -1,4 +1,5 @@
 <h1>ImpactJS - Plugins</h1>
+
 <h3>Retro High Score Name Field</h3>
 <a href="http://www.pointofimpactjs.com/plugins/view/35/retro-high-score-name-field">Plugin Home</a>
 
@@ -27,7 +28,65 @@
 	<code>this.retroNameField.getName()</code>
 </pre>
 
-<br />
+<hr />
 
 <h3>TextureAtlas and TextureAtlasAnimation</h3>
-<p>This plugin allows you to create a TextureAtlas from TexturePacker output and then create animation objects by referring to frames of different sizes by name.</p>
+<p>This plugin allows you to create a TextureAtlas from <a target="_blank" href="http://www.codeandweb.com/texturepacker">TexturePacker</a> output and then create animation objects by referring to frames of different sizes by name.</p>
+<p>A demo has been included for your convenience, just copy in your impact folder</p>
+<p><strong>Usage is really simple:</strong></p>
+
+<ol>
+	<li>Add all the images you need to TexturePacker and then publish your atlas image, making sure to select JSON-ARRAY as the data format.</li>
+	<li>Assign the JSON array from TexturePacker to a varaiable in packed-textures.js
+	<pre><code>
+	// This module holds our TexturePacker exported JSON arrays
+	ig.PackedTextures = ig.Class.extend({
+		spacepods: {
+			"frames": [
+			{
+				....
+			}],
+			"meta": {
+			   ....
+			}
+		}
+	});
+	</code></pre>
+	</li>
+	<li>Include the plugin and your packed texure data in your main.js requires()
+	<pre><code>
+	ig.module( 
+		'game.main' 
+	)
+	.requires(
+		'impact.game',
+		'plugins.texture-atlas', // Include the plugin
+		'plugins.packed-textures', // Include the TexturePacker JSON array for the texture atlas
+		'game.entities.pod'
+	)
+	</code></pre>
+	</li>
+	<li>Create a TextureAtlas object in your main.js
+	<pre><code>
+	MyGame = ig.Game.extend({
+		textureAtlas: null,
+		pod: null,
+
+		init: function() {
+			this.textureAtlas = new ig.TextureAtlas('media/space_pods_array.png', new ig.PackedTextures().spacepods); // Create the texture atlas
+			this.pod = ig.game.spawnEntity(EntityPod, 0, 0);
+		}
+	});
+	</code></pre>
+	</li>
+	<li>Lastly add a animation to your entity using the texture atlas
+	<pre><code>
+	EntityPod = ig.Entity.extend({
+		init: function( x, y, settings ) {
+			this.parent( x, y, settings );
+			this.addTextureAtlasAnim( ig.game.textureAtlas, 'idle', 1, ['EscapePodFemale 1.png', 'EscapePodFemale 2.png'], false); // Add texture atlas animation
+		}
+	});
+	</code></pre>
+	</li>
+</ol>
