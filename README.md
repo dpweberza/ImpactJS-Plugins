@@ -1,4 +1,4 @@
-<h1>ImpactJS - Plugins</h1>
+<h1><a href="http://impactjs.com">ImpactJS</a> - Plugins</h1>
 
 <h3>Retro High Score Name Field</h3>
 <a href="http://www.pointofimpactjs.com/plugins/view/35/retro-high-score-name-field">Plugin Home</a>
