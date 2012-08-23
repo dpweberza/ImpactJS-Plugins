@@ -27,5 +27,7 @@
 	<code>this.retroNameField.getName()</code>
 </pre>
 
+<br />
+
 <h3>TextureAtlas and TextureAtlasAnimation</h3>
 <p>This plugin allows you to create a TextureAtlas from TexturePacker output and then create animation objects by referring to frames of different sizes by name.</p>
