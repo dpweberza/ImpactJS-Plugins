@@ -30,10 +30,9 @@
 
 <hr />
 
-<h3>TextureAtlas and TextureAtlasAnimation</h3>
+<h3>TextureAtlas, TextureAtlasAnimation and TextureAtlasImage</h3>
 <p>This plugin allows you to create a TextureAtlas from <a target="_blank" href="http://www.codeandweb.com/texturepacker">TexturePacker</a> output and then create animation objects by referring to frames of different sizes by name.</p>
 <p>A demo has been included for your convenience, just copy in your impact folder</p>
-<p><strong>Warning:</strong> I still need to implement drawing when the animation is angled. Coming soon...</p>
 <p><strong>Usage is really simple:</strong></p>
 
 <ol>
