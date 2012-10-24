@@ -71,10 +71,11 @@
 	<pre><code>
 	MyGame = ig.Game.extend({
 		textureAtlas: null,
+		textureImage: new ig.Image('media/space_pods_array.png'),
 		pod: null,
 
 		init: function() {
-			this.textureAtlas = new ig.TextureAtlas('media/space_pods_array.png', new ig.PackedTextures().spacepods); // Create the texture atlas
+			this.textureAtlas = new ig.TextureAtlas(this.textureImage, new ig.PackedTextures().spacepods); // Create the texture atlas
 			this.pod = ig.game.spawnEntity(EntityPod, 0, 0);
 		}
 	});
