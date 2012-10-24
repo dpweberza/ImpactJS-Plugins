@@ -85,7 +85,20 @@
 	EntityPod = ig.Entity.extend({
 		init: function( x, y, settings ) {
 			this.parent( x, y, settings );
+			// Entity addTextureAtlasAnim: function(textureAtlas, name, frameTime, sequence, stop, maintainFrameOffset)
 			this.addTextureAtlasAnim( ig.game.textureAtlas, 'idle', 1, ['EscapePodFemale 1.png', 'EscapePodFemale 2.png'], false); // Add texture atlas animation
+		}
+	});
+	</code></pre>
+	</li>
+	<li>Or if you just need a static image to your entity using the texture atlas
+	<pre><code>
+	EntityButton = ig.Entity.extend({
+		backgroundImage: null,
+		init: function( x, y, settings ) {
+			this.parent( x, y, settings );
+			// TextureAtlasImage init: function(textureAtlas, frameName, maintainFrameOffset)
+			this.backgroundImage = new ig.TextureAtlasImage(ig.game.textureAtlas, 'ButtonBg.png', true);
 		}
 	});
 	</code></pre>
