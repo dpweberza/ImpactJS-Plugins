@@ -31,7 +31,7 @@
 <hr />
 
 <h3>TextureAtlas, TextureAtlasAnimation and TextureAtlasImage</h3>
-<p>This plugin allows you to create a TextureAtlas from <a target="_blank" href="http://www.codeandweb.com/texturepacker">TexturePacker</a> output and then create animation objects by referring to frames of different sizes by name.</p>
+<p>This plugin allows you to create a TextureAtlas from <a target="_blank" href="http://www.codeandweb.com/texturepacker">TexturePacker</a> or <a href="http://renderhjs.net/shoebox/">ShoeBox</a> output and then create animation objects by referring to frames of different sizes by name.</p>
 <p>A demo has been included for your convenience, just copy in your impact folder</p>
 <p><strong>Usage is really simple:</strong></p>
 
@@ -101,6 +101,12 @@
 			this.backgroundImage = new ig.TextureAtlasImage(ig.game.textureAtlas, 'ButtonBg.png', true);
 		}
 	});
+	</code></pre>
+	</li>
+	<li>If your using ShoeBox which is awesome and free, the you will want to update your export settings
+	<pre><code>
+	outer: 		{"frames": [\n@loop]\n,"meta": {\n\t"app": "ShoeBox",\n\t"size": {"w":@W,"h":@H}\n}\n}
+	format:		\t{\n\t\t"filename": "@id", "rotated": false,"trimmed": true,\n\t\t"frame": {"x":@x,"y":@y,"w":@w,"h":@h},\n\t\t"spriteSourceSize": {"x":@fx,"y":@fy,"w":@fw,"h":@fh},\n\t\t"sourceSize": {"w":@fw,"h":@fh}\n\t},\n
 	</code></pre>
 	</li>
 </ol>
