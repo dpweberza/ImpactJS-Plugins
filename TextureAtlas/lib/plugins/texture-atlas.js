@@ -202,7 +202,7 @@ ig.module(
     });
 	
     /**
-     * A TextureAtlasImage extends Impact's Font class to allow looking up a font's bitmap from the TexturePacker JSON array
+     * A TextureAtlasFont extends Impact's Font class to allow looking up a font's bitmap from the TexturePacker JSON array
      *
      * Author: dpweberza@gmail.com
      *
@@ -222,11 +222,7 @@ ig.module(
                 this.maintainFrameOffset = maintainFrameOffset;
         },
 	
-        _drawChar: function( c, targetX, targetY ) {
-            if( !this.loaded || c < 0 || c >= this.indices.length ) {
-                return 0;
-            }
-			
+        _drawChar: function( c, targetX, targetY ) {		
             var scale = ig.system.scale;
             var charX = this.indices[c] * scale;
             var charY = 0;
