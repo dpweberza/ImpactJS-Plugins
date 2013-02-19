@@ -80,7 +80,7 @@
 	});
 	</code></pre>
 	</li>
-	<li>Lastly add a animation to your entity using the texture atlas
+	<li>Lastly add an animation to your entity using the texture atlas
 	<pre><code>
 	EntityPod = ig.Entity.extend({
 		init: function( x, y, settings ) {
@@ -103,7 +103,7 @@
 	});
 	</code></pre>
 	</li>
-	<li>If your using ShoeBox which is awesome and free, the you will want to update your export settings
+	<li>If your using ShoeBox which is awesome and free, then you will want to update your export settings
 	<pre><code>
 	outer: 		{"frames": [\n@loop]\n,"meta": {\n\t"app": "ShoeBox",\n\t"size": {"w":@W,"h":@H}\n}\n}
 	format:		\t{\n\t\t"filename": "@id", "rotated": false,"trimmed": true,\n\t\t"frame": {"x":@x,"y":@y,"w":@w,"h":@h},\n\t\t"spriteSourceSize": {"x":@fx,"y":@fy,"w":@fw,"h":@fh},\n\t\t"sourceSize": {"w":@fw,"h":@fh}\n\t},\n

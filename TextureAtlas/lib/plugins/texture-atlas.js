@@ -71,7 +71,7 @@ ig.module(
      *
      * Author: dpweberza@gmail.com
      *
-     * Version 0.3  - 2012/10/24
+     * Version 0.4  - 2013/02/19
      *
      * Notes:
      */
@@ -133,30 +133,24 @@ ig.module(
                 ig.system.context.globalAlpha = this.alpha;
             }
             
-            if (this.angle == 0) {		
-                this.textureAtlas.image.draw(x, y, this.frameData.frame.x, this.frameData.frame.y, this.frameData.frame.w, this.frameData.frame.h);
-            }
-            else {
-                var halfWidth = this.frameData.frame.w / 2;
-                var halfHeight = this.frameData.frame.h / 2;
+            var halfWidth = this.frameData.frame.w / 2;
+            var halfHeight = this.frameData.frame.h / 2;
                  
-                ig.system.context.save();
-                ig.system.context.translate(
-                    ig.system.getDrawPos(x + halfWidth),
-                    ig.system.getDrawPos(y + halfHeight)
-                    );
-                ig.system.context.rotate(this.angle);
+            ig.system.context.save();
+            ig.system.context.translate(
+                ig.system.getDrawPos(x + halfWidth),
+                ig.system.getDrawPos(y + halfHeight)
+                );
+            ig.system.context.rotate(this.angle);
 
-                var scaleX = this.flipX ? -1 : 1;
-                var scaleY = this.flipY ? -1 : 1;
-                if (this.flipX || this.flipY) {
-                    ig.system.context.save();
-                    ig.system.context.scale( scaleX, scaleY );
-                }
-                
-                this.textureAtlas.image.draw(-halfWidth, -halfHeight, this.frameData.frame.x, this.frameData.frame.y, this.frameData.frame.w, this.frameData.frame.h);
-                ig.system.context.restore();
+            var scaleX = this.flip.x ? -1 : 1;
+            var scaleY = this.flip.y ? -1 : 1;
+            if (this.flip.x || this.flip.y) {
+                ig.system.context.scale(scaleX, scaleY);
             }
+                
+            this.textureAtlas.image.draw(-halfWidth, -halfHeight, this.frameData.frame.x, this.frameData.frame.y, this.frameData.frame.w, this.frameData.frame.h);
+            ig.system.context.restore();
             
             if (this.alpha != 1) {
                 ig.system.context.globalAlpha = 1;
@@ -208,7 +202,7 @@ ig.module(
      *
      * Version 0.1  - 2013/02/19
      *
-     * Notes: this is an untested implementation
+     * Notes:
      */
     ig.TextureAtlasFont = ig.Font.extend({
         textureAtlas: null,
@@ -220,6 +214,7 @@ ig.module(
             this.frameData = this.textureAtlas.getFrameData(frameName);
             if (maintainFrameOffset)
                 this.maintainFrameOffset = maintainFrameOffset;
+            this._loadMetrics();
         },
 	
         _drawChar: function( c, targetX, targetY ) {		
@@ -238,9 +233,46 @@ ig.module(
                 y += this.frameData.spriteSourceSize.y;
             }
             
+            //console.log(charWidth + ' - ' + charHeight);
             this.textureAtlas.image.draw(x, y, this.frameData.frame.x + charX, this.frameData.frame.y + charY, charWidth, charHeight); // TODO - test and correct
+            //this.textureAtlas.image.draw(x, y, this.frameData.frame.x, this.frameData.frame.y, this.frameData.frame.w, this.frameData.frame.h);
 				
             return this.widthMap[c] + this.letterSpacing;
+        },
+        
+        _loadMetrics: function() {
+            // Draw the bottommost line of this font image into an offscreen canvas
+            // and analyze it pixel by pixel.
+            // A run of non-transparent pixels represents a character and its width
+		
+            this.height = this.frameData.frame.h -1;
+            this.widthMap = [];
+            this.indices = [];
+		
+            var canvas = ig.$new('canvas');
+            canvas.width = this.frameData.frame.w;
+            canvas.height = this.frameData.frame.h;
+      
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage( this.textureAtlas.image.data, this.frameData.frame.x, this.frameData.frame.y, this.frameData.frame.w, this.frameData.frame.h, 0, 0, this.frameData.frame.w, this.frameData.frame.h);
+            var px = ctx.getImageData(0, this.frameData.frame.h-1, this.frameData.frame.w, 1);
+		
+            var currentChar = 0;
+            var currentWidth = 0;
+            for( var x = 0; x < this.frameData.frame.w; x++ ) {
+                var index = x * 4 + 3; // alpha component of this pixel
+                if( px.data[index] != 0 ) {
+                    currentWidth++;
+                }
+                else if( px.data[index] == 0 && currentWidth ) {
+                    this.widthMap.push( currentWidth );
+                    this.indices.push( x-currentWidth );
+                    currentChar++;
+                    currentWidth = 0;
+                }
+            }
+            this.widthMap.push( currentWidth );
+            this.indices.push( x-currentWidth );
         }
     });
 

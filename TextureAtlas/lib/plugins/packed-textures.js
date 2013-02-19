@@ -8,23 +8,42 @@ ig.module(
 
     // This module holds our TexturePacker exported JSON arrays
     ig.PackedTextures = ig.Class.extend({
-        spacepods: {
+        sprites: {
             "frames": [
-
-
             {
-                "filename": "EscapePodFemale 1.png",
-                "frame": {
-                    "x":2,
-                    "y":2,
-                    "w":250,
-                    "h":250
-                },
+                "filename": "04b03.font.png", 
                 "rotated": false,
-                "trimmed": false,
+                "trimmed": true,
+                "frame": {
+                    "x":0,
+                    "y":0,
+                    "w":422,
+                    "h":9
+                },
                 "spriteSourceSize": {
                     "x":0,
                     "y":0,
+                    "w":422,
+                    "h":9
+                },
+                "sourceSize": {
+                    "w":422,
+                    "h":9
+                }
+            },
+            {
+                "filename": "EscapePodFemale 1.png", 
+                "rotated": false,
+                "trimmed": true,
+                "frame": {
+                    "x":0,
+                    "y":9,
+                    "w":92,
+                    "h":111
+                },
+                "spriteSourceSize": {
+                    "x":79,
+                    "y":71,
                     "w":250,
                     "h":250
                 },
@@ -34,18 +53,18 @@ ig.module(
                 }
             },
             {
-                "filename": "EscapePodFemale 2.png",
-                "frame": {
-                    "x":254,
-                    "y":2,
-                    "w":250,
-                    "h":250
-                },
+                "filename": "EscapePodFemale 2.png", 
                 "rotated": false,
-                "trimmed": false,
+                "trimmed": true,
+                "frame": {
+                    "x":92,
+                    "y":9,
+                    "w":92,
+                    "h":111
+                },
                 "spriteSourceSize": {
-                    "x":0,
-                    "y":0,
+                    "x":79,
+                    "y":71,
                     "w":250,
                     "h":250
                 },
@@ -54,63 +73,15 @@ ig.module(
                     "h":250
                 }
             },
-            {
-                "filename": "EscapePodMale 1.png",
-                "frame": {
-                    "x":2,
-                    "y":254,
-                    "w":250,
-                    "h":250
-                },
-                "rotated": false,
-                "trimmed": false,
-                "spriteSourceSize": {
-                    "x":0,
-                    "y":0,
-                    "w":250,
-                    "h":250
-                },
-                "sourceSize": {
-                    "w":250,
-                    "h":250
-                }
-            },
-            {
-                "filename": "EscapePodMale 2.png",
-                "frame": {
-                    "x":254,
-                    "y":254,
-                    "w":250,
-                    "h":250
-                },
-                "rotated": false,
-                "trimmed": false,
-                "spriteSourceSize": {
-                    "x":0,
-                    "y":0,
-                    "w":250,
-                    "h":250
-                },
-                "sourceSize": {
-                    "w":250,
-                    "h":250
-                }
-            }],
+            ]
+            ,
             "meta": {
-                "app": "http://www.texturepacker.com",
-                "version": "1.0",
-                "image": "space_pods_array.png",
-                "format": "RGBA8888",
+                "app": "ShoeBox",
                 "size": {
                     "w":512,
                     "h":512
-                },
-                "scale": "1",
-                "smartupdate": "$TexturePacker:SmartUpdate:a46ef0d9504271481f07c238e925b191$"
+                }
             }
         }
-
-
     });
-
 });

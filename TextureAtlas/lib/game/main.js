@@ -12,12 +12,18 @@ ig.module(
     MyGame = ig.Game.extend({
         
         textureAtlas: null,
-	textureImage: new ig.Image('media/space_pods_array.png'),
-        pod: null,
+        textureImage: new ig.Image('media/sprites.png'),
+        
+        animatedPod: null, // demo for TextureAtlasAnimation
+        staticPod: null, // demo for TextureAtlasImage
+        font: null, // demo for TextureAtlasFont
 	
         init: function() {
-            this.textureAtlas = new ig.TextureAtlas(this.textureImage, new ig.PackedTextures().spacepods); // Create the texture atlas
-            this.pod = ig.game.spawnEntity(EntityPod, 0, 0);
+            this.textureAtlas = new ig.TextureAtlas(this.textureImage, new ig.PackedTextures().sprites); // Create the texture atlas
+            this.animatedPod = ig.game.spawnEntity(EntityPod, 0, 0);
+            this.animatedPod.currentAnim.flip.x = true;
+            this.staticPod = new ig.TextureAtlasImage(ig.game.textureAtlas, 'EscapePodFemale 1.png', true);
+            this.font = new ig.TextureAtlasFont(ig.game.textureAtlas, '04b03.font.png', true);
         },
 	
         update: function() {
@@ -26,10 +32,11 @@ ig.module(
 	
         draw: function() {
             this.parent();
+            this.staticPod.draw(100, 0);
+            this.font.draw('TextureAtlasFont', 0, 0);
         }
     });
 
 
     ig.main( '#canvas', MyGame, 60, 320, 240, 1 );
-
 });
