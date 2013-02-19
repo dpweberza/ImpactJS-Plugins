@@ -103,7 +103,12 @@
 	});
 	</code></pre>
 	</li>
-	<li>If your using ShoeBox which is awesome and free, then you will want to update your export settings
+        <li>Or if you want to load a font using the texture atlas
+	<pre><code>
+	this.font = new ig.TextureAtlasFont(ig.game.textureAtlas, '04b03.font.png', true);
+	</code></pre>
+	</li>
+	<li>If you're using ShoeBox which is awesome and free, then you will want to update your export settings
 	<pre><code>
 	outer: 		{"frames": [\n@loop]\n,"meta": {\n\t"app": "ShoeBox",\n\t"size": {"w":@W,"h":@H}\n}\n}
 	format:		\t{\n\t\t"filename": "@id", "rotated": false,"trimmed": true,\n\t\t"frame": {"x":@x,"y":@y,"w":@w,"h":@h},\n\t\t"spriteSourceSize": {"x":@fx,"y":@fy,"w":@fw,"h":@fh},\n\t\t"sourceSize": {"w":@fw,"h":@fh}\n\t},\n
