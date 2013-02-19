@@ -200,5 +200,52 @@ ig.module(
             this.textureAtlas.image.draw(x, y, this.frameData.frame.x, this.frameData.frame.y, this.frameData.frame.w, this.frameData.frame.h);
         }
     });
+	
+    /**
+     * A TextureAtlasImage extends Impact's Font class to allow looking up a font's bitmap from the TexturePacker JSON array
+     *
+     * Author: dpweberza@gmail.com
+     *
+     * Version 0.1  - 2013/02/19
+     *
+     * Notes: this is an untested implementation
+     */
+    ig.TextureAtlasFont = ig.Font.extend({
+        textureAtlas: null,
+        frameData: 0,
+        maintainFrameOffset: false,
+        
+        init: function(textureAtlas, frameName, maintainFrameOffset) {
+            this.textureAtlas = textureAtlas;
+            this.frameData = this.textureAtlas.getFrameData(frameName);
+            if (maintainFrameOffset)
+                this.maintainFrameOffset = maintainFrameOffset;
+        },
+	
+        _drawChar: function( c, targetX, targetY ) {
+            if( !this.loaded || c < 0 || c >= this.indices.length ) {
+                return 0;
+            }
+			
+            var scale = ig.system.scale;
+            var charX = this.indices[c] * scale;
+            var charY = 0;
+            var charWidth = this.widthMap[c] * scale;
+            var charHeight = (this.height-2) * scale;		
+			
+            var x = ig.system.getDrawPos(targetX);
+            var y = ig.system.getDrawPos(targetY);
+            if (this.frameData.trimmed && this.maintainFrameOffset) 
+            {
+                // offset the image position according to source size, so that trimmed image still appears as it should
+                x += this.frameData.spriteSourceSize.x;
+                y += this.frameData.spriteSourceSize.y;
+            }
+            
+            this.textureAtlas.image.draw(x, y, this.frameData.frame.x + charX, this.frameData.frame.y + charY, charWidth, charHeight); // TODO - test and correct
+				
+            return this.widthMap[c] + this.letterSpacing;
+        }
+    });
 
 });
