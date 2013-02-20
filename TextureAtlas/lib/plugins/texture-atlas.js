@@ -37,44 +37,75 @@ ig.module(
      *
      * Notes:
      */
-    ig.TextureAtlas = ig.Class.extend({
-        image: null,
+    ig.TextureAtlas = ig.Image.extend({
+        jsonData:  null,
         
-        packedTexture:  null,
-        width: 0,
-        height: 0,
-        
-        init: function(spriteSheetImage, packedTexture) {
-            this.image = spriteSheetImage;
-            
-            if (packedTexture == null)
-                throw('Packed texture is null!');
-            this.packedTexture = packedTexture;
-            this.width = packedTexture.meta.size.w;
-            this.height = packedTexture.meta.size.h;
+        load: function(loadCallback) {
+            if( this.loaded ) {
+                if( loadCallback ) {
+                    loadCallback( this.path, true );
+                }
+                return;
+            }
+            else if( !this.loaded && ig.ready ) {
+                this.loadCallback = loadCallback || null;
+                
+                // Load JSON data
+                var url = ig.prefix + (this.path.substr(0, this.path.lastIndexOf('.')) || this.path) + '.txt';
+                var AJAX = null;
+                if (window.XMLHttpRequest) {              
+                    AJAX = new XMLHttpRequest();              
+                } else {                                  
+                    AJAX = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                if (AJAX) {
+                    AJAX.open('get', url, false);  // synchronous                            
+                    AJAX.send(null);
+                    this.jsonData = JSON.parse(AJAX.responseText); 
+                    console.log('TextureAtlas: loaded JSON data from: ' + url);
+                } else throw('TextureAtlas Exception: AJAX not supported!');
+			
+                this.data = new Image();
+                this.data.onload = this.onload.bind(this);
+                this.data.onerror = this.onerror.bind(this);
+                this.data.src = ig.prefix + this.path + ig.nocache;
+            }
+            else {
+                ig.addResource( this );
+            }
+		
+            ig.Image.cache[this.path] = this;
         },
-        
-        getFrameData: function(frame) {
-            var i = 0;
-            for (i = 0; i <  this.packedTexture.frames.length; i++)
+      
+        getFrameData: function(frame) {          
+            // Search for the frame data
+            for (var i = 0; i <  this.jsonData.frames.length; i++)
             {
-                if (this.packedTexture.frames[i].filename == frame)
-                    return this.packedTexture.frames[i];
+                if (this.jsonData.frames[i].filename == frame)
+                    return this.jsonData.frames[i];
             }
             
-            throw('Frame: ' + frame + ' does not exist!');
+            throw('TextureAtlas Exception: frame [' + frame + '] does not exist!');
+        },
+        
+        getWidth: function() {
+            return this.jsonData.meta.size.w;
+        },
+        
+        getHeight: function() {
+            return this.jsonData.meta.size.h;
         }
     });
     
     /**
-     * A TextureAtlasAnimation extends Impact's Animation class to allow looking up a frames data from the TexturePacker JSON array
-     *
-     * Author: dpweberza@gmail.com
-     *
-     * Version 0.4  - 2013/02/19
-     *
-     * Notes:
-     */
+    * A TextureAtlasAnimation extends Impact's Animation class to allow looking up a frames data from the TexturePacker JSON array
+    *
+    * Author: dpweberza@gmail.com
+    *
+    * Version 0.4  - 2013/02/19
+    *
+    * Notes:
+    */
     ig.TextureAtlasAnimation = ig.Animation.extend({
         textureAtlas: null,
         maintainFrameOffset: false,
@@ -149,7 +180,7 @@ ig.module(
                 ig.system.context.scale(scaleX, scaleY);
             }
                 
-            this.textureAtlas.image.draw(-halfWidth, -halfHeight, this.frameData.frame.x, this.frameData.frame.y, this.frameData.frame.w, this.frameData.frame.h);
+            this.textureAtlas.draw(-halfWidth, -halfHeight, this.frameData.frame.x, this.frameData.frame.y, this.frameData.frame.w, this.frameData.frame.h);
             ig.system.context.restore();
             
             if (this.alpha != 1) {
@@ -160,14 +191,14 @@ ig.module(
     
     
     /**
-     * A TextureAtlasImage extends Impact's Image class to allow looking up an images data from the TexturePacker JSON array
-     *
-     * Author: dpweberza@gmail.com
-     *
-     * Version 0.1  - 2012/10/22
-     *
-     * Notes:
-     */
+    * A TextureAtlasImage extends Impact's Image class to allow looking up an images data from the TexturePacker JSON array
+    *
+    * Author: dpweberza@gmail.com
+    *
+    * Version 0.1  - 2012/10/22
+    *
+    * Notes:
+    */
     ig.TextureAtlasImage = ig.Image.extend({
         textureAtlas: null,
         frameData: 0,
@@ -191,19 +222,19 @@ ig.module(
                 y += this.frameData.spriteSourceSize.y;
             }
             
-            this.textureAtlas.image.draw(x, y, this.frameData.frame.x, this.frameData.frame.y, this.frameData.frame.w, this.frameData.frame.h);
+            this.textureAtlas.draw(x, y, this.frameData.frame.x, this.frameData.frame.y, this.frameData.frame.w, this.frameData.frame.h);
         }
     });
 	
     /**
-     * A TextureAtlasFont extends Impact's Font class to allow looking up a font's bitmap from the TexturePacker JSON array
-     *
-     * Author: dpweberza@gmail.com
-     *
-     * Version 0.1  - 2013/02/19
-     *
-     * Notes:
-     */
+    * A TextureAtlasFont extends Impact's Font class to allow looking up a font's bitmap from the TexturePacker JSON array
+    *
+    * Author: dpweberza@gmail.com
+    *
+    * Version 0.1  - 2013/02/19
+    *
+    * Notes:
+    */
     ig.TextureAtlasFont = ig.Font.extend({
         textureAtlas: null,
         frameData: 0,
@@ -233,9 +264,7 @@ ig.module(
                 y += this.frameData.spriteSourceSize.y;
             }
             
-            //console.log(charWidth + ' - ' + charHeight);
-            this.textureAtlas.image.draw(x, y, this.frameData.frame.x + charX, this.frameData.frame.y + charY, charWidth, charHeight); // TODO - test and correct
-            //this.textureAtlas.image.draw(x, y, this.frameData.frame.x, this.frameData.frame.y, this.frameData.frame.w, this.frameData.frame.h);
+            this.textureAtlas.draw(x, y, this.frameData.frame.x + charX, this.frameData.frame.y + charY, charWidth, charHeight);
 				
             return this.widthMap[c] + this.letterSpacing;
         },
@@ -254,7 +283,7 @@ ig.module(
             canvas.height = this.frameData.frame.h;
       
             var ctx = canvas.getContext('2d');
-            ctx.drawImage( this.textureAtlas.image.data, this.frameData.frame.x, this.frameData.frame.y, this.frameData.frame.w, this.frameData.frame.h, 0, 0, this.frameData.frame.w, this.frameData.frame.h);
+            ctx.drawImage( this.textureAtlas.data, this.frameData.frame.x, this.frameData.frame.y, this.frameData.frame.w, this.frameData.frame.h, 0, 0, this.frameData.frame.w, this.frameData.frame.h);
             var px = ctx.getImageData(0, this.frameData.frame.h-1, this.frameData.frame.w, 1);
 		
             var currentChar = 0;
