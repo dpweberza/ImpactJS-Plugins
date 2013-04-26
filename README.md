@@ -1,5 +1,8 @@
 <h1><a href="http://impactjs.com">ImpactJS</a> - Plugins</h1>
 
+<h3>NOTICE: Unfortunately I will no longer be maintaining any ImpactJS plugins.</h3>
+This means no bug fixes, pull request merging or support.
+
 <h3>Retro High Score Name Field</h3>
 <a href="http://www.pointofimpactjs.com/plugins/view/35/retro-high-score-name-field">Plugin Home</a>
 
