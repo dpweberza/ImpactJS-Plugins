@@ -40,7 +40,7 @@
 	<li>Assign the JSON array from TexturePacker to a varaiable in packed-textures.js
 	<pre><code>
 	// This module holds our TexturePacker exported JSON arrays
-	ig.PackedTextures = ig.Class.extend({
+	ig.PackedTextures = {
 		spacepods: {
 			"frames": [
 			{
@@ -50,7 +50,7 @@
 			   ....
 			}
 		}
-	});
+	};
 	</code></pre>
 	</li>
 	<li>Include the plugin and your packed texure data in your main.js requires()
@@ -69,12 +69,10 @@
 	<li>Create a TextureAtlas object in your main.js
 	<pre><code>
 	MyGame = ig.Game.extend({
-		textureAtlas: null,
-		textureImage: new ig.Image('media/space_pods_array.png'),
+		textureAtlas: new ig.TextureAtlas(new ig.Image('media/sprites.png'), ig.PackedTextures.sprites),
 		pod: null,
 
 		init: function() {
-			this.textureAtlas = new ig.TextureAtlas(this.textureImage, new ig.PackedTextures().spacepods); // Create the texture atlas
 			this.pod = ig.game.spawnEntity(EntityPod, 0, 0);
 		}
 	});
@@ -83,10 +81,14 @@
 	<li>Lastly add an animation to your entity using the texture atlas
 	<pre><code>
 	EntityPod = ig.Entity.extend({
+		// create own texture-atlas
+		// textureAtlas: new ig.TextureAtlas(new ig.Image('media/sprites.png'), ig.PackedTextures.sprites),
+
 		init: function( x, y, settings ) {
 			this.parent( x, y, settings );
-			// Entity addTextureAtlasAnim: function(textureAtlas, name, frameTime, sequence, stop, maintainFrameOffset)
-			this.addTextureAtlasAnim( ig.game.textureAtlas, 'idle', 1, ['EscapePodFemale 1.png', 'EscapePodFemale 2.png'], false); // Add texture atlas animation
+			this.textureAtlas = ig.game.textureAtlas; // use main texture-atlas
+			// Entity addAtlasAnim: function(name, frameTime, sequence, stop, maintainFrameOffset)
+			this.addAtlasAnim('idle', 1, [1, 2], false); // Add texture atlas animation
 		}
 	});
 	</code></pre>
