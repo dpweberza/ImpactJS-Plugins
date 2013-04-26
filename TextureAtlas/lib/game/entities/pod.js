@@ -2,13 +2,16 @@ ig.module(
     'game.entities.pod' 
     )
 .requires(
-    'impact.entity'
-    )
+    'impact.entity',
+    'plugins.texture-atlas' // Include the plugin
+)
 .defines(function(){
     EntityPod = ig.Entity.extend({
+        textureAtlas: new ig.TextureAtlas(new ig.Image('media/sprites.png'), ig.PackedTextures.sprites),
+
         init: function( x, y, settings ) {
             this.parent( x, y, settings );
-            this.addTextureAtlasAnim( ig.game.textureAtlas, 'idle', 1, ['EscapePodFemale 1.png', 'EscapePodFemale 2.png'], false); // Add texture atlas animation
+            this.addAtlasAnim('idle', 1, [1, 2], false); // Add texture atlas animation
         }
     });
 });
