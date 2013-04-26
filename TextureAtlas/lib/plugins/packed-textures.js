@@ -7,7 +7,7 @@ ig.module(
     "use strict";
 
     // This module holds our TexturePacker exported JSON arrays
-    ig.PackedTextures = ig.Class.extend({
+    ig.PackedTextures = {
         sprites: {
             "frames": [
             {
@@ -83,5 +83,5 @@ ig.module(
                 }
             }
         }
-    });
+    };
 });
