@@ -10,16 +10,12 @@ ig.module(
 .defines(function(){
 
     MyGame = ig.Game.extend({
-        
-        textureAtlas: null,
-        textureImage: new ig.Image('media/sprites.png'),
-        
+        textureAtlas: new ig.TextureAtlas(new ig.Image('media/sprites.png'), ig.PackedTextures.sprites),
         animatedPod: null, // demo for TextureAtlasAnimation
         staticPod: null, // demo for TextureAtlasImage
         font: null, // demo for TextureAtlasFont
-	
+
         init: function() {
-            this.textureAtlas = new ig.TextureAtlas(this.textureImage, new ig.PackedTextures().sprites); // Create the texture atlas
             this.animatedPod = ig.game.spawnEntity(EntityPod, 0, 0);
             this.animatedPod.currentAnim.flip.x = true;
             this.staticPod = new ig.TextureAtlasImage(ig.game.textureAtlas, 'EscapePodFemale 1.png', true);

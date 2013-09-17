@@ -11,14 +11,12 @@ ig.module(
     
     // Add a nice convenience method to the Entity class so that we can add TextureAtlasAnimations
     ig.Entity.inject({
-        addTextureAtlasAnim: function(textureAtlas, name, frameTime, sequence, stop, maintainFrameOffset) {
+        addAtlasAnim: function(name, frameTime, sequence, stop, maintainFrameOffset) {
             
-            if(!textureAtlas) 
-                throw('No texture atlas to add the animation from!');
             if(!name) 
                 throw('No name to call the animation!');
-            
-            var a = new ig.TextureAtlasAnimation(textureAtlas, frameTime, sequence, stop, maintainFrameOffset);
+
+            var a = new ig.TextureAtlasAnimation(this, this.textureAtlas, frameTime, sequence, stop, maintainFrameOffset);
             this.anims[name] = a;
             if( !this.currentAnim ) {
                 this.currentAnim = a;
@@ -55,15 +53,21 @@ ig.module(
         },
         
         getFrameData: function(frame) {
-            var i = 0;
-            for (i = 0; i <  this.packedTexture.frames.length; i++)
-            {
-                if (this.packedTexture.frames[i].filename == frame)
-                    return this.packedTexture.frames[i];
+            if (typeof(frame) === 'number') {
+                if (this.packedTexture.frames[frame])
+                    return this.packedTexture.frames[frame];
+            } else {
+                var i = 0;
+                for (i = 0; i <  this.packedTexture.frames.length; i++)
+                {
+                    if (this.packedTexture.frames[i].filename == frame)
+                        return this.packedTexture.frames[i];
+                }
             }
-            
+
             throw('Frame: ' + frame + ' does not exist!');
         }
+
     });
     
     /**
@@ -76,11 +80,13 @@ ig.module(
      * Notes:
      */
     ig.TextureAtlasAnimation = ig.Animation.extend({
+        entity: null,
         textureAtlas: null,
         maintainFrameOffset: false,
         frameData: 0,
         
-        init: function(textureAtlas, frameTime, sequence, stop, maintainFrameOffset) {
+        init: function(entity, textureAtlas, frameTime, sequence, stop, maintainFrameOffset) {
+            this.entity = entity;
             this.textureAtlas = textureAtlas;
             this.timer = new ig.Timer();
             this.frameTime = frameTime;
@@ -107,7 +113,13 @@ ig.module(
             else {
                 this.frame = frameTotal % this.sequence.length;
             }
+
             this.frameData = this.textureAtlas.getFrameData(this.sequence[this.frame]);
+
+            this.entity.size = {
+                x: this.frameData.frame.w,
+                y: this.frameData.frame.h
+            };
         },
         
         
@@ -140,7 +152,7 @@ ig.module(
             ig.system.context.translate(
                 ig.system.getDrawPos(x + halfWidth),
                 ig.system.getDrawPos(y + halfHeight)
-                );
+            );
             ig.system.context.rotate(this.angle);
 
             var scaleX = this.flip.x ? -1 : 1;
@@ -149,7 +161,11 @@ ig.module(
                 ig.system.context.scale(scaleX, scaleY);
             }
                 
-            this.textureAtlas.image.draw(-halfWidth, -halfHeight, this.frameData.frame.x, this.frameData.frame.y, this.frameData.frame.w, this.frameData.frame.h);
+            this.textureAtlas.image.draw(
+                -halfWidth, -halfHeight, 
+                this.frameData.frame.x, this.frameData.frame.y, 
+                this.frameData.frame.w, this.frameData.frame.h
+            );
             ig.system.context.restore();
             
             if (this.alpha != 1) {
